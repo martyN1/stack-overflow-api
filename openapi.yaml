@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: Stack Overflow API
+  version: 1.0.0
+
+paths:
+  /questions:
+    get:
+      operationId: searchQuestions
+      summary: Search stack overflow questions by criteria
+      description: Search stack overflow questions by criteria
+      parameters:
+        - name: tags
+          in: query
+          required: false
+          description: "Tag to filter questions by ie: php"
+          schema:
+            type: string
+
+        - name: title
+          in: query
+          required: false
+          description: Title to filter questions by
+          schema:
+            type: string
+
+        - name: sortBy
+          in: query
+          required: false
+          description: Sort field
+          schema:
+            type: string
+            default: creation_date
+            enum:
+              - creation_date
+              - answer_count
+
+        - name: sortDirection
+          in: query
+          required: false
+          description: Sort direction
+          schema:
+            type: string
+            default: asc
+            enum:
+              - asc
+              - desc
+
+        - name: page
+          in: query
+          required: false
+          description: Page
+          schema:
+            type: number
+            minimum: 1
+            default: 1
+
+        - name: perPage
+          in: query
+          required: false
+          description: Items per page
+          schema:
+            type: number
+            minimum: 1
+            maximum: 50
+            default: 10
+
+      responses:
+        '200':
+          description: Paginated list of questions
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchQuestionsResponse'
+        '400':
+          description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestParamsErrorResponse'
+        '500':
+          description: Server error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /questions/{id}:
+    get:
+      operationId: getQuestion
+      summary: Get an specific stack overflow question by its id
+      description:  Get an specific stack overflow question by its id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Question id
+          schema:
+            type: number
+
+      responses:
+        '200':
+          description: Question detail
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetQuestionResponse'
+        '400':
+          description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestParamsErrorResponse'
+        '404':
+          description: Not Fount
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /questions/{id}/answers:
+    get:
+      operationId: getQuestionAnswers
+      summary: Get question answers list
+      description: Get question answers list
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Question id
+          schema:
+            type: number
+
+        - name: sortBy
+          in: query
+          required: false
+          description: Sort field
+          schema:
+            type: string
+            default: creation_date
+            enum:
+              - creation_date
+              - score
+
+        - name: sortDirection
+          in: query
+          required: false
+          description: Sort direction
+          schema:
+            type: string
+            default: asc
+            enum:
+              - asc
+              - desc
+
+        - name: page
+          in: query
+          required: false
+          description: Page
+          schema:
+            type: number
+            minimum: 1
+            default: 1
+
+        - name: perPage
+          in: query
+          required: false
+          description: Items per page
+          schema:
+            type: number
+            minimum: 1
+            maximum: 50
+            default: 10
+
+      responses:
+        '200':
+          description: Paginated list of answers
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetQuestionAnswersResponse'
+        '400':
+          description: Bad request
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestParamsErrorResponse'
+        '500':
+          description: Server error
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+
+    RequestParamsErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          description: Request errors list
+          items:
+            type: object
+            description: Request parameter error
+            properties:
+              property:
+                type: string
+                description: Request parameter which has an error
+              value:
+                type: string
+                description: Request parameter value which caused the error
+              message:
+                type: string
+                description: Error message
+
+    SearchQuestionsResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Question'
+
+    GetQuestionResponse:
+      $ref: '#/components/schemas/QuestionDetail'
+
+    GetQuestionAnswersResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/Answer'
+
+    Question:
+      type: object
+      description: Question
+      properties:
+        id:
+          type: number
+          description: Question id
+        title:
+          type: string
+          description: Question title
+        answer_count:
+          type: number
+          description: Question answer count
+        tags:
+          type: array
+          description: Question tags list
+          items:
+            type: string
+            description: Question tag
+        creation_date:
+          type: string
+          description: Question creation date in Y-m-d H:i:s format
+
+    QuestionDetail:
+      type: object
+      description: Question
+      properties:
+        id:
+          type: number
+          description: Question id
+        title:
+          type: string
+          description: Question title
+        body:
+          type: string
+          description: Question body
+        score:
+          type: number
+          description: Question score
+        view_count:
+          type: number
+          description: Question view count
+        answer_count:
+          type: number
+          description: Question answer count
+        comment_count:
+          type: number
+          description: Question comment count
+        tags:
+          type: array
+          description: Question tags list
+          items:
+            type: string
+            description: Question tag
+        creation_date:
+          type: string
+          description: Question creation date in Y-m-d H:i:s format
+
+    Answer:
+      type: object
+      description: Answer
+      properties:
+        id:
+          type: number
+          description: Answer id
+        body:
+          type: string
+          description: Answer body
+        score:
+          type: number
+          description: Answer score
+        comment_count:
+          type: number
+          description: Answer comment count
+        creation_date:
+          type: string
+          description: Answer creation date in Y-m-d H:i:s format

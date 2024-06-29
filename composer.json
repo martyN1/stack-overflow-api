@@ -7,14 +7,14 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "google/cloud-bigquery": "^1.30",
         "symfony/console": "7.1.*",
         "symfony/dotenv": "7.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.1.*",
         "symfony/runtime": "7.1.*",
+        "symfony/validator": "7.1.*",
         "symfony/yaml": "7.1.*"
-    },
-    "require-dev": {
     },
     "config": {
         "allow-plugins": {
@@ -64,5 +64,12 @@
             "allow-contrib": false,
             "require": "7.1.*"
         }
+    },
+    "require-dev": {
+        "fzaninotto/faker": "^1.5",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "7.1.*",
+        "symfony/css-selector": "7.1.*",
+        "symfony/phpunit-bridge": "^7.1"
     }
 }
