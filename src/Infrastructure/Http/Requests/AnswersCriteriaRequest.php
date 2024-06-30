@@ -2,9 +2,6 @@
 
 namespace App\Infrastructure\Http\Requests;
 
-
-use App\Domain\Criteria\Filter\FilterOperator;
-use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class AnswersCriteriaRequest extends CriteriaRequest

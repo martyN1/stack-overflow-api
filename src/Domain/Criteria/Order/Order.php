@@ -6,9 +6,10 @@ namespace App\Domain\Criteria\Order;
 
 final class Order
 {
-    public function __construct(private OrderBy $orderBy, private OrderType $orderType)
-    {
-    }
+    public function __construct(
+        private OrderBy $orderBy,
+        private OrderType $orderType
+    ) {}
 
     public static function createDesc(OrderBy $orderBy): Order
     {

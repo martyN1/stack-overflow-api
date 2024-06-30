@@ -4,9 +4,7 @@ namespace App\Infrastructure\Http\Controllers;
 
 use App\Application\UseCases\GetQuestionAnswers;
 use App\Domain\Criteria\Filter\Filter;
-use App\Domain\Criteria\Filter\FilterField;
 use App\Domain\Criteria\Filter\FilterOperator;
-use App\Domain\Criteria\Filter\FilterValue;
 use App\Infrastructure\Http\Requests\AnswersCriteriaRequest;
 use App\Infrastructure\Http\Resources\AnswerResource;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
